@@ -54,16 +54,16 @@ export function CreateContactForm() {
       </div>
       <div className="flex flex-wrap gap-3">
         <div>
-          <label className="block text-xs font-medium text-gray-700">Name</label>
-          <input value={name} onChange={(e) => setName(e.target.value)} required className="mt-1 rounded-md border border-gray-300 px-3 py-1.5 text-sm" />
+          <label htmlFor="contact-name" className="block text-xs font-medium text-gray-700">Name</label>
+          <input id="contact-name" value={name} onChange={(e) => setName(e.target.value)} required className="mt-1 rounded-md border border-gray-300 px-3 py-1.5 text-sm" />
         </div>
         <div>
-          <label className="block text-xs font-medium text-gray-700">Phone</label>
-          <input value={phone} onChange={(e) => setPhone(e.target.value)} className="mt-1 rounded-md border border-gray-300 px-3 py-1.5 text-sm" />
+          <label htmlFor="contact-phone" className="block text-xs font-medium text-gray-700">Phone</label>
+          <input id="contact-phone" value={phone} onChange={(e) => setPhone(e.target.value)} className="mt-1 rounded-md border border-gray-300 px-3 py-1.5 text-sm" />
         </div>
         <div>
-          <label className="block text-xs font-medium text-gray-700">Email</label>
-          <input value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1 rounded-md border border-gray-300 px-3 py-1.5 text-sm" />
+          <label htmlFor="contact-email" className="block text-xs font-medium text-gray-700">Email</label>
+          <input id="contact-email" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1 rounded-md border border-gray-300 px-3 py-1.5 text-sm" />
         </div>
       </div>
       {error && <p className="text-sm text-red-600">{error}</p>}

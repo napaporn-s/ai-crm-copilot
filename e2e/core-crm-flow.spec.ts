@@ -9,9 +9,17 @@ import { DEMO_PASSWORD } from './utils/api';
  */
 test('login, create lead, transition stage, survives reload, and is audit-logged', async ({ page }) => {
   await page.goto('/login');
+  // Wait past initial hydration before interacting — a click that lands
+  // before the client component attaches its handler would fall through
+  // to a native (unhandled) form submit instead of the fetch-based login.
+  await page.waitForLoadState('networkidle');
   await page.getByLabel('Email').fill('admin@jenosize.demo');
   await page.getByLabel('Password').fill(DEMO_PASSWORD);
-  await page.getByRole('button', { name: 'Sign in' }).click();
+  const [loginResponse] = await Promise.all([
+    page.waitForResponse((res) => res.url().includes('/api/auth/login') && res.request().method() === 'POST'),
+    page.getByRole('button', { name: 'Sign in' }).click(),
+  ]);
+  expect(loginResponse.ok()).toBeTruthy();
   await expect(page).toHaveURL(/\/leads$/);
 
   await page.getByRole('link', { name: '+ New Lead' }).click();

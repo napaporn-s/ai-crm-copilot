@@ -67,4 +67,29 @@ test.describe('RBAC violations', () => {
 
     await rep2Context.close();
   });
+
+  test('WON is terminal: Sales Rep cannot reopen it, Admin can (BA §3.1)', async ({ request, browser }) => {
+    await login(request, 'rep1@jenosize.demo');
+    const company = await createCompany(request, `RBAC Co ${Date.now()}`);
+    const contact = await createContact(request, company.id, 'RBAC Contact D');
+    const lead = await createLead(request, { contactId: contact.id, companyId: company.id });
+
+    const wonRes = await request.patch(`/api/leads/${lead.id}/stage`, { data: { toStage: 'WON' } });
+    expect(wonRes.ok()).toBeTruthy();
+
+    // Same Sales Rep (owner) cannot reopen their own WON lead.
+    const reopenAttempt = await request.patch(`/api/leads/${lead.id}/stage`, { data: { toStage: 'QUALIFIED' } });
+    expect(reopenAttempt.status()).toBe(409);
+
+    // Admin can.
+    const adminContext = await browser.newContext();
+    const adminApi = adminContext.request;
+    await login(adminApi, 'admin@jenosize.demo');
+    const adminReopen = await adminApi.patch(`/api/leads/${lead.id}/stage`, { data: { toStage: 'QUALIFIED' } });
+    expect(adminReopen.ok()).toBeTruthy();
+    const body = await adminReopen.json();
+    expect(body.data.stage).toBe('QUALIFIED');
+
+    await adminContext.close();
+  });
 });

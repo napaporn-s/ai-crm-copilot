@@ -12,16 +12,21 @@ export default defineConfig({
     ['json', { outputFile: 'docs/04-test-report-data.json' }]
   ],
   use: {
-    baseURL: process.env.TEST_BASE_URL || 'http://localhost:3020',
+    baseURL: process.env.TEST_BASE_URL || 'http://localhost:3021',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   webServer: {
-    command: 'npm run dev',
-    url: 'http://localhost:3020/api/health',
+    // Serves an already-built app, not `next dev` — under `fullyParallel`
+    // a dev server JIT-compiles each route on first hit, and many routes
+    // compiling at once under concurrent test load produced multi-second
+    // stalls that flaked the UI-driven spec. Run `npm run build` before
+    // `npm run test:e2e` (see package.json).
+    command: 'npm run start',
+    url: 'http://localhost:3021/api/health',
     reuseExistingServer: !process.env.CI,
-    timeout: 120 * 1000,
+    timeout: 180 * 1000,
   },
 });

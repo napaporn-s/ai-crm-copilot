@@ -73,8 +73,8 @@ test.describe('LINE webhook security', () => {
   });
 
   test('a validly signed but malformed JSON body is rejected as 400, not 500', async ({ request }) => {
-    const malformed = '{not-json';
-    const signature = sign(malformed);
+    const malformed = Buffer.from('{not-json', 'utf-8');
+    const signature = sign(malformed.toString('utf-8'));
     const res = await request.post('/api/line/webhook', {
       headers: { 'Content-Type': 'application/json', 'x-line-signature': signature },
       data: malformed,

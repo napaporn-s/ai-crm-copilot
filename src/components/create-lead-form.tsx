@@ -53,16 +53,17 @@ export function CreateLeadForm() {
         </div>
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700">Source</label>
-        <select value={source} onChange={(e) => setSource(e.target.value)} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm">
+        <label htmlFor="lead-source" className="block text-sm font-medium text-gray-700">Source</label>
+        <select id="lead-source" value={source} onChange={(e) => setSource(e.target.value)} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm">
           <option value="MANUAL">Manual</option>
           <option value="WEBSITE">Website</option>
           <option value="LINE">LINE</option>
         </select>
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700">Budget (THB, optional)</label>
+        <label htmlFor="lead-budget" className="block text-sm font-medium text-gray-700">Budget (THB, optional)</label>
         <input
+          id="lead-budget"
           type="number"
           value={budget}
           onChange={(e) => setBudget(e.target.value)}
@@ -70,8 +71,9 @@ export function CreateLeadForm() {
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700">Notes (optional)</label>
+        <label htmlFor="lead-notes" className="block text-sm font-medium text-gray-700">Notes (optional)</label>
         <textarea
+          id="lead-notes"
           value={scopeNotes}
           onChange={(e) => setScopeNotes(e.target.value)}
           rows={3}

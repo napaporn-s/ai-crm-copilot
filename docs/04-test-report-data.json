@@ -64,10 +64,10 @@
     "version": "1.62.1",
     "workers": 10,
     "webServer": {
-      "command": "npm run dev",
-      "url": "http://localhost:3020/api/health",
+      "command": "npm run start",
+      "url": "http://localhost:3021/api/health",
       "reuseExistingServer": true,
-      "timeout": 120000
+      "timeout": 180000
     }
   },
   "suites": [
@@ -100,12 +100,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 16478,
+                      "duration": 3029,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-04T14:27:40.992Z",
+                      "startTime": "2026-08-04T20:28:25.416Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -134,12 +134,12 @@
                       "workerIndex": 1,
                       "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 16371,
+                      "duration": 3021,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-04T14:27:41.139Z",
+                      "startTime": "2026-08-04T20:28:25.449Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -168,12 +168,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 16377,
+                      "duration": 2674,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-04T14:27:41.037Z",
+                      "startTime": "2026-08-04T20:28:25.401Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -202,12 +202,12 @@
                       "workerIndex": 3,
                       "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 366,
+                      "duration": 620,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-04T14:27:41.075Z",
+                      "startTime": "2026-08-04T20:28:25.558Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -232,7 +232,7 @@
       "specs": [
         {
           "title": "login, create lead, transition stage, survives reload, and is audit-logged",
-          "ok": false,
+          "ok": true,
           "tags": [],
           "tests": [
             {
@@ -245,50 +245,18 @@
                 {
                   "workerIndex": 4,
                   "parallelIndex": 4,
-                  "status": "timedOut",
-                  "duration": 32667,
-                  "error": {
-                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
-                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                  },
-                  "errors": [
-                    {
-                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                    },
-                    {
-                      "location": {
-                        "file": "C:\\Projects\\personal\\Jenosize\\e2e\\core-crm-flow.spec.ts",
-                        "column": 34,
-                        "line": 12
-                      },
-                      "message": "Error: locator.fill: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Email')\u001b[22m\n\n\n  10 | test('login, create lead, transition stage, survives reload, and is audit-logged', async ({ page }) => {\n  11 |   await page.goto('/login');\n> 12 |   await page.getByLabel('Email').fill('admin@jenosize.demo');\n     |                                  ^\n  13 |   await page.getByLabel('Password').fill(DEMO_PASSWORD);\n  14 |   await page.getByRole('button', { name: 'Sign in' }).click();\n  15 |   await expect(page).toHaveURL(/\\/leads$/);\n    at C:\\Projects\\personal\\Jenosize\\e2e\\core-crm-flow.spec.ts:12:34"
-                    }
-                  ],
+                  "status": "passed",
+                  "duration": 4523,
+                  "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-08-04T14:27:41.110Z",
+                  "startTime": "2026-08-04T20:28:25.504Z",
                   "annotations": [],
-                  "attachments": [
-                    {
-                      "name": "screenshot",
-                      "contentType": "image/png",
-                      "path": "C:\\Projects\\personal\\Jenosize\\test-results\\core-crm-flow-login-create-f60b9--reload-and-is-audit-logged-chromium\\test-failed-1.png"
-                    },
-                    {
-                      "name": "video",
-                      "contentType": "video/webm",
-                      "path": "C:\\Projects\\personal\\Jenosize\\test-results\\core-crm-flow-login-create-f60b9--reload-and-is-audit-logged-chromium\\video.webm"
-                    },
-                    {
-                      "name": "error-context",
-                      "contentType": "text/markdown",
-                      "path": "C:\\Projects\\personal\\Jenosize\\test-results\\core-crm-flow-login-create-f60b9--reload-and-is-audit-logged-chromium\\error-context.md"
-                    }
-                  ]
+                  "attachments": []
                 }
               ],
-              "status": "unexpected"
+              "status": "expected"
             }
           ],
           "id": "149b7f9db7e37f57da64-af1fbffb8efd229fa418",
@@ -327,12 +295,12 @@
                       "workerIndex": 5,
                       "parallelIndex": 5,
                       "status": "passed",
-                      "duration": 10113,
+                      "duration": 252,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-04T14:27:41.086Z",
+                      "startTime": "2026-08-04T20:28:25.585Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -361,12 +329,12 @@
                       "workerIndex": 6,
                       "parallelIndex": 6,
                       "status": "passed",
-                      "duration": 10082,
+                      "duration": 243,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-04T14:27:41.118Z",
+                      "startTime": "2026-08-04T20:28:25.581Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -395,12 +363,12 @@
                       "workerIndex": 7,
                       "parallelIndex": 7,
                       "status": "passed",
-                      "duration": 12491,
+                      "duration": 2299,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-04T14:27:41.177Z",
+                      "startTime": "2026-08-04T20:28:25.598Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -415,7 +383,7 @@
             },
             {
               "title": "a validly signed but malformed JSON body is rejected as 400, not 500",
-              "ok": false,
+              "ok": true,
               "tags": [],
               "tests": [
                 {
@@ -428,48 +396,18 @@
                     {
                       "workerIndex": 8,
                       "parallelIndex": 8,
-                      "status": "failed",
-                      "duration": 9998,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m400\u001b[39m\nReceived: \u001b[31m401\u001b[39m",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m400\u001b[39m\nReceived: \u001b[31m401\u001b[39m\n    at C:\\Projects\\personal\\Jenosize\\e2e\\line-webhook-security.spec.ts:82:26",
-                        "location": {
-                          "file": "C:\\Projects\\personal\\Jenosize\\e2e\\line-webhook-security.spec.ts",
-                          "column": 26,
-                          "line": 82
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 80 |\u001b[39m       data\u001b[33m:\u001b[39m malformed\u001b[33m,\u001b[39m\n \u001b[90m 81 |\u001b[39m     })\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 82 |\u001b[39m     expect(res\u001b[33m.\u001b[39mstatus())\u001b[33m.\u001b[39mtoBe(\u001b[35m400\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                          \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 83 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 84 |\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 85 |\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\personal\\Jenosize\\e2e\\line-webhook-security.spec.ts",
-                            "column": 26,
-                            "line": 82
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m400\u001b[39m\nReceived: \u001b[31m401\u001b[39m\n\n  80 |       data: malformed,\n  81 |     });\n> 82 |     expect(res.status()).toBe(400);\n     |                          ^\n  83 |   });\n  84 | });\n  85 |\n    at C:\\Projects\\personal\\Jenosize\\e2e\\line-webhook-security.spec.ts:82:26"
-                        }
-                      ],
+                      "status": "passed",
+                      "duration": 387,
+                      "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-04T14:27:41.199Z",
+                      "startTime": "2026-08-04T20:28:25.689Z",
                       "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Projects\\personal\\Jenosize\\test-results\\line-webhook-security-LINE-f4392--is-rejected-as-400-not-500-chromium\\error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\Projects\\personal\\Jenosize\\e2e\\line-webhook-security.spec.ts",
-                        "column": 26,
-                        "line": 82
-                      }
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
               "id": "c05f273d18b2b550536d-b80a19da28624b8ad5ab",
@@ -510,12 +448,12 @@
                       "workerIndex": 9,
                       "parallelIndex": 9,
                       "status": "passed",
-                      "duration": 16109,
+                      "duration": 2409,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-04T14:27:41.207Z",
+                      "startTime": "2026-08-04T20:28:25.657Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -541,15 +479,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 6,
+                      "parallelIndex": 6,
                       "status": "passed",
-                      "duration": 12145,
+                      "duration": 1873,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-04T14:27:41.602Z",
+                      "startTime": "2026-08-04T20:28:25.971Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -575,15 +513,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 6,
-                      "parallelIndex": 6,
+                      "workerIndex": 5,
+                      "parallelIndex": 5,
                       "status": "passed",
-                      "duration": 7374,
+                      "duration": 2285,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-04T14:27:51.343Z",
+                      "startTime": "2026-08-04T20:28:25.990Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -609,15 +547,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
-                      "parallelIndex": 5,
+                      "workerIndex": 8,
+                      "parallelIndex": 8,
                       "status": "passed",
-                      "duration": 5368,
+                      "duration": 1979,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-04T14:27:51.348Z",
+                      "startTime": "2026-08-04T20:28:26.229Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -629,6 +567,40 @@
               "file": "rbac-violations.spec.ts",
               "line": 47,
               "column": 7
+            },
+            {
+              "title": "WON is terminal: Sales Rep cannot reopen it, Admin can (BA §3.1)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 2216,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-04T20:28:26.307Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f8a2aea1ce5cebd2547b-1167e089f03961e9d45c",
+              "file": "rbac-violations.spec.ts",
+              "line": 71,
+              "column": 7
             }
           ]
         }
@@ -637,11 +609,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-08-04T14:27:30.477Z",
-    "duration": 45773.009,
-    "expected": 11,
+    "startTime": "2026-08-04T20:28:22.693Z",
+    "duration": 9043.223,
+    "expected": 14,
     "skipped": 0,
-    "unexpected": 2,
+    "unexpected": 0,
     "flaky": 0
   }
 }

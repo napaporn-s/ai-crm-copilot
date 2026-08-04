@@ -1,0 +1,39 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: jenosize
+      POSTGRES_PASSWORD: devpass
+      POSTGRES_DB: jenosize
+    ports:
+      - '5433:5432'
+    volumes:
+      - jenosize-pg-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U jenosize']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3021:3000'
+    environment:
+      DATABASE_URL: postgresql://jenosize:devpass@postgres:5432/jenosize?schema=public
+      SESSION_SECRET: dev-only-local-secret-do-not-use-in-prod
+      LINE_MOCK_MODE: 'true'
+      LINE_CHANNEL_SECRET: dev-mock-channel-secret
+      LINE_CHANNEL_ACCESS_TOKEN: dev-mock-access-token
+      AI_MOCK_MODE: 'true'
+      AI_PROVIDER_API_KEY: dev-mock-key
+      AI_PROVIDER_BASE_URL: https://api.openai.com/v1
+      NODE_ENV: production
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  jenosize-pg-data:

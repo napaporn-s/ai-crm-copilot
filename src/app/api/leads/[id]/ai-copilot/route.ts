@@ -12,9 +12,13 @@ import { z } from 'zod';
 const RequestBodySchema = z.object({}).strict();
 
 /** Test-only hook so E2E-02 (AI fallback) can be exercised over real HTTP
- * without depending on a live LLM provider outage. Ignored outside test/dev. */
+ * without depending on a live LLM provider outage. Gated on an explicit
+ * flag rather than `NODE_ENV !== 'production'` — E2E runs against a
+ * production build (NODE_ENV=production) for server stability, so the gate
+ * can't piggyback on build mode. `ALLOW_TEST_HOOKS` must never be set to
+ * "true" in a real deployment (see .env.example). */
 function shouldForceFailure(request: NextRequest): boolean {
-  if (process.env.NODE_ENV === 'production') return false;
+  if (process.env.ALLOW_TEST_HOOKS !== 'true') return false;
   return request.headers.get('x-simulate-ai-failure') === 'true';
 }
 
