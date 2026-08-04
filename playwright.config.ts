@@ -18,15 +18,19 @@ export default defineConfig({
     video: 'retain-on-failure',
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
-  webServer: {
-    // Serves an already-built app, not `next dev` — under `fullyParallel`
-    // a dev server JIT-compiles each route on first hit, and many routes
-    // compiling at once under concurrent test load produced multi-second
-    // stalls that flaked the UI-driven spec. Run `npm run build` before
-    // `npm run test:e2e` (see package.json).
-    command: 'npm run start',
-    url: 'http://localhost:3021/api/health',
-    reuseExistingServer: !process.env.CI,
-    timeout: 180 * 1000,
-  },
+  // When TEST_BASE_URL points elsewhere (e.g. the live Vercel deployment),
+  // don't spin up a redundant local server — just run against that URL.
+  webServer: process.env.TEST_BASE_URL
+    ? undefined
+    : {
+        // Serves an already-built app, not `next dev` — under `fullyParallel`
+        // a dev server JIT-compiles each route on first hit, and many routes
+        // compiling at once under concurrent test load produced multi-second
+        // stalls that flaked the UI-driven spec. Run `npm run build` before
+        // `npm run test:e2e` (see package.json).
+        command: 'npm run start',
+        url: 'http://localhost:3021/api/health',
+        reuseExistingServer: !process.env.CI,
+        timeout: 180 * 1000,
+      },
 });

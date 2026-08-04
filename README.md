@@ -87,16 +87,21 @@ to be able to force the fallback path deterministically; `npm run test:e2e` expe
 
 ## 6. Deploying
 
-- **Docker:** `docker compose up --build` builds and runs the full stack (Postgres + app) — see
-  `docker-compose.yml` and `Dockerfile` (multi-stage, `output: standalone`, non-root user).
+**Live demo:** https://jenosize-crm-ai.vercel.app
+Demo login: `admin@jenosize.demo` / `manager1@jenosize.demo` / `rep1@jenosize.demo` … `rep17@jenosize.demo`,
+password `Passw0rd!` (same set as local — see §3). Database is a managed Postgres (Neon), migrated
+and seeded with the same synthetic dataset described in §3 (2,000 contacts / 300 leads).
+
+Deployed on Vercel, connected to `napaporn-s/jenosize-crm-ai-system` on `main` — pushing to `main`
+triggers a new build automatically. `LINE_MOCK_MODE=false` in production: the LINE OA integration is
+live (real webhook signature verification, real outbound sends via the Messaging API), not mocked.
+
+- **Docker (self-host alternative):** `docker compose up --build` builds and runs the full stack
+  (Postgres + app) — see `docker-compose.yml` and `Dockerfile` (multi-stage, `output: standalone`,
+  non-root user).
 - Any platform that can run a Node 20 container + a Postgres database works (Fly.io, Railway, Render,
   a VPS). Set the `.env.example` variables as real secrets in that platform's config, never in the
   image.
-- **Not yet done as part of this submission:** a live public deployment. The steps above are complete
-  and were verified to work locally end-to-end (see `docs/04-TEST-REPORT-QA.md` §5), but this
-  repository was assembled inside an automated session without a cloud account attached — deploying
-  to Koy's chosen platform, wiring a real LINE OA test channel, recording the walkthrough video, and
-  publishing demo credentials are the remaining human steps before submission.
 
 ## 7. Known limitations / production next steps
 
@@ -121,3 +126,22 @@ to be able to force the fallback path deterministically; `npm run test:e2e` expe
 Full contract table in `docs/02-ARCHITECTURE-SA.md` §3. All responses use the envelope in
 `src/core/errors/api-response.ts` (`{ success, code, message, data?, errors?, timestampUtc }`).
 Every mutating route (`POST`/`PATCH`) is Zod-validated and writes an `AuditLog` row.
+
+## 9. Structured logging & monitoring notes
+
+- **Structured logs:** every audit event is emitted as a single-line JSON `console.log` tagged
+  `[AUDIT_TRAIL]` (`src/core/audit/audit-logger.ts`) — actor, role, action, resource, status,
+  sanitized before/after diff, timestamp — in addition to being persisted to the `AuditLog` table.
+  Route-level failures are logged via `console.error` with a `[UNHANDLED_ROUTE_ERROR]` /
+  `[AUDIT_TRAIL_PERSIST_FAILED]` tag (`src/core/errors/handle-route-error.ts`). On Vercel this is
+  queryable as-is under Observability → Logs, filterable by that tag prefix; self-hosted, pipe stdout
+  into any log aggregator (e.g. Loki, CloudWatch, Datadog) — the JSON-per-line shape needs no
+  transformation to be ingested.
+- **What's *not* wired up (documented gap, not silently missing):** no APM/error-tracking SDK (e.g.
+  Sentry), no uptime/latency dashboard, no alerting. For this MVP, `GET /api/health` (checks DB
+  connectivity) is the only health signal, and the `AuditLog` table itself is the durable record —
+  query it directly for "who did what, when" during an incident. A production deployment should add:
+  an error-tracking SDK on the Route Handler layer, an uptime check against `/api/health`, and an
+  alert on repeated `[AUDIT_TRAIL_PERSIST_FAILED]` lines (that specific failure mode is a documented
+  trade-off — see `docs/02-ARCHITECTURE-SA.md` §5 — and is the one thing in this codebase that fails
+  silently by design, so it's the one thing worth alerting on externally).

@@ -28,6 +28,13 @@ test.describe('AI Copilot', () => {
   });
 
   test('forced provider failure falls back to the deterministic heuristic (SKILL.md §5)', async ({ request }) => {
+    // ALLOW_TEST_HOOKS is intentionally unset in production (README §3.1) —
+    // this test-only header must be inert there. Skipped, not failed, when
+    // running against a remote target (TEST_BASE_URL set) for that reason.
+    test.skip(
+      !!process.env.TEST_BASE_URL,
+      'ALLOW_TEST_HOOKS is deliberately disabled in production; this hook cannot fire there by design'
+    );
     await login(request, 'admin@jenosize.demo');
     const company = await createCompany(request, `AI Fallback Co ${Date.now()}`);
     const contact = await createContact(request, company.id, 'AI Fallback Contact');

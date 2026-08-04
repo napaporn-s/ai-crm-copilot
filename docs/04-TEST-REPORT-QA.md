@@ -136,7 +136,39 @@ Beyond the automated suite, the full stack was verified running for real, not ju
 | E2E-04 passes (RBAC, beyond JD minimum) | ✅ |
 | README/handover docs | ✅ see `README.md` |
 
-## 7. Known local-environment note (not a repo defect)
+## 7. Final production verification (post-deploy)
+
+After deploying to Vercel (`https://jenosize-crm-ai.vercel.app`) and fixing a LINE credential mix-up
+found during manual testing (Channel ID/Secret/Access Token had been entered into the wrong env var
+slots — corrected, see handover checklist), the full suite was re-run directly against the live
+deployment (`TEST_BASE_URL=https://jenosize-crm-ai.vercel.app`), reproduced twice:
+
+```
+13 passed, 1 skipped (both runs)
+```
+
+The 1 skip is `ai-copilot-fallback.spec.ts`'s forced-provider-failure case — deliberately skipped
+against a remote target because `ALLOW_TEST_HOOKS` is correctly unset in production (§3 item 5); the
+test hook it depends on being inert there is itself the expected, secure behavior, not a gap.
+
+Two adjustments were needed to get a clean run against the real deployment (both are environment
+differences, not app defects):
+- `line-webhook-security.spec.ts` needs the **real** `LINE_CHANNEL_SECRET` in the test process's env
+  to compute a signature production will accept — obvious in hindsight, but worth stating since a
+  stale/placeholder secret in the test runner's own env silently produces 401s that look like an app
+  bug.
+- `core-crm-flow.spec.ts`'s post-submit assertions needed longer timeouts (5s → 15s): a cold Vercel
+  function plus a cold Neon connection can legitimately take longer than localhost round trips. The
+  flow itself was never wrong — only the default Playwright assertion window was too tight for a real
+  deployment.
+
+**Side effect to know about:** running this suite against production creates real rows (test
+companies/contacts/leads named things like `RBAC Co ...`, `AI Test Co ...`) in the live demo
+database. Harmless (synthetic data on top of synthetic seed data) but visible if `/companies` or
+`/leads` is filtered/browsed during a live demo — expect to see a handful of test-named records mixed
+into the seeded 60/2,000/300.
+
+## 8. Known local-environment note (not a repo defect)
 
 During this session's verification, a stray `next dev` process from an earlier debugging run remained
 bound to port 3020 on the development machine and could not be terminated from the automation

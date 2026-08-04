@@ -63,12 +63,7 @@
     "updateSourceMethod": "patch",
     "version": "1.62.1",
     "workers": 10,
-    "webServer": {
-      "command": "npm run start",
-      "url": "http://localhost:3021/api/health",
-      "reuseExistingServer": true,
-      "timeout": 180000
-    }
+    "webServer": null
   },
   "suites": [
     {
@@ -100,12 +95,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3029,
+                      "duration": 7305,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-04T20:28:25.416Z",
+                      "startTime": "2026-08-04T22:23:31.535Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -125,26 +120,46 @@
               "tests": [
                 {
                   "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "ALLOW_TEST_HOOKS is deliberately disabled in production; this hook cannot fire there by design",
+                      "location": {
+                        "file": "C:\\Projects\\personal\\Jenosize\\e2e\\ai-copilot-fallback.spec.ts",
+                        "line": 34,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
                       "workerIndex": 1,
                       "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 3021,
+                      "status": "skipped",
+                      "duration": 32,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-04T20:28:25.449Z",
-                      "annotations": [],
+                      "startTime": "2026-08-04T22:23:31.591Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "ALLOW_TEST_HOOKS is deliberately disabled in production; this hook cannot fire there by design",
+                          "location": {
+                            "file": "C:\\Projects\\personal\\Jenosize\\e2e\\ai-copilot-fallback.spec.ts",
+                            "line": 34,
+                            "column": 10
+                          }
+                        }
+                      ],
                       "attachments": []
                     }
                   ],
-                  "status": "expected"
+                  "status": "skipped"
                 }
               ],
               "id": "6ff9f0df289e164ccfff-92d1d739667e59e3ec61",
@@ -168,12 +183,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 2674,
+                      "duration": 4897,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-04T20:28:25.401Z",
+                      "startTime": "2026-08-04T22:23:31.609Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -183,7 +198,7 @@
               ],
               "id": "6ff9f0df289e164ccfff-14b0a081b0392600d55a",
               "file": "ai-copilot-fallback.spec.ts",
-              "line": 49,
+              "line": 56,
               "column": 7
             },
             {
@@ -202,12 +217,12 @@
                       "workerIndex": 3,
                       "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 620,
+                      "duration": 254,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-04T20:28:25.558Z",
+                      "startTime": "2026-08-04T22:23:31.599Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -217,7 +232,7 @@
               ],
               "id": "6ff9f0df289e164ccfff-0683dc55ab6c6aca53a2",
               "file": "ai-copilot-fallback.spec.ts",
-              "line": 64,
+              "line": 71,
               "column": 7
             }
           ]
@@ -246,12 +261,12 @@
                   "workerIndex": 4,
                   "parallelIndex": 4,
                   "status": "passed",
-                  "duration": 4523,
+                  "duration": 18176,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-08-04T20:28:25.504Z",
+                  "startTime": "2026-08-04T22:23:31.649Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -295,12 +310,12 @@
                       "workerIndex": 5,
                       "parallelIndex": 5,
                       "status": "passed",
-                      "duration": 252,
+                      "duration": 482,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-04T20:28:25.585Z",
+                      "startTime": "2026-08-04T22:23:31.614Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -329,12 +344,12 @@
                       "workerIndex": 6,
                       "parallelIndex": 6,
                       "status": "passed",
-                      "duration": 243,
+                      "duration": 453,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-04T20:28:25.581Z",
+                      "startTime": "2026-08-04T22:23:31.679Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -363,12 +378,12 @@
                       "workerIndex": 7,
                       "parallelIndex": 7,
                       "status": "passed",
-                      "duration": 2299,
+                      "duration": 4380,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-04T20:28:25.598Z",
+                      "startTime": "2026-08-04T22:23:31.590Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -397,12 +412,12 @@
                       "workerIndex": 8,
                       "parallelIndex": 8,
                       "status": "passed",
-                      "duration": 387,
+                      "duration": 483,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-04T20:28:25.689Z",
+                      "startTime": "2026-08-04T22:23:31.679Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -448,12 +463,12 @@
                       "workerIndex": 9,
                       "parallelIndex": 9,
                       "status": "passed",
-                      "duration": 2409,
+                      "duration": 4591,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-04T20:28:25.657Z",
+                      "startTime": "2026-08-04T22:23:31.744Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -479,15 +494,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 6,
-                      "parallelIndex": 6,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1873,
+                      "duration": 1686,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-04T20:28:25.971Z",
+                      "startTime": "2026-08-04T22:23:31.756Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -513,15 +528,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
-                      "parallelIndex": 5,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 2285,
+                      "duration": 9211,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-04T20:28:25.990Z",
+                      "startTime": "2026-08-04T22:23:31.968Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -547,15 +562,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 8,
-                      "parallelIndex": 8,
+                      "workerIndex": 5,
+                      "parallelIndex": 5,
                       "status": "passed",
-                      "duration": 1979,
+                      "duration": 6883,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-04T20:28:26.229Z",
+                      "startTime": "2026-08-04T22:23:32.206Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -581,15 +596,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 6,
+                      "parallelIndex": 6,
                       "status": "passed",
-                      "duration": 2216,
+                      "duration": 9571,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-08-04T20:28:26.307Z",
+                      "startTime": "2026-08-04T22:23:32.241Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -609,10 +624,10 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-08-04T20:28:22.693Z",
-    "duration": 9043.223,
-    "expected": 14,
-    "skipped": 0,
+    "startTime": "2026-08-04T22:23:30.357Z",
+    "duration": 20545.197999999997,
+    "expected": 13,
+    "skipped": 1,
     "unexpected": 0,
     "flaky": 0
   }
