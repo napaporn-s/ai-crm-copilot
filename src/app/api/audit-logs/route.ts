@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import type { NextRequest } from 'next/server';
 import { z } from 'zod';
 import { ResponseFactory } from '@/core/errors/api-response';
