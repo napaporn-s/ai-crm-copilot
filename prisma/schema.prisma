@@ -1,0 +1,168 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum UserRole {
+  ADMIN
+  SALES_MANAGER
+  SALES_REP
+}
+
+enum LeadStage {
+  NEW
+  QUALIFIED
+  PROPOSAL
+  WON
+  LOST
+}
+
+enum LeadSource {
+  WEBSITE
+  MANUAL
+  LINE
+}
+
+enum ActivityType {
+  STAGE_CHANGE
+  NOTE
+  AI_SUGGESTION
+  AI_ACTION
+}
+
+enum MessageDirection {
+  INBOUND
+  OUTBOUND
+}
+
+enum MessageStatus {
+  DRAFT
+  SENT
+  FAILED
+  PENDING_RETRY
+}
+
+model User {
+  id           String     @id @default(uuid())
+  email        String     @unique
+  passwordHash String
+  name         String
+  role         UserRole   @default(SALES_REP)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  leads        Lead[]
+  activities   Activity[]
+}
+
+model Company {
+  id        String    @id @default(uuid())
+  name      String
+  industry  String?
+  website   String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  contacts  Contact[]
+  leads     Lead[]
+
+  @@index([deletedAt])
+}
+
+model Contact {
+  id         String    @id @default(uuid())
+  companyId  String
+  company    Company   @relation(fields: [companyId], references: [id])
+  name       String
+  email      String?
+  phone      String?
+  lineUserId String?   @unique
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+  leads      Lead[]
+  messages   Message[]
+
+  @@index([companyId])
+  @@index([deletedAt])
+}
+
+model Lead {
+  id         String     @id @default(uuid())
+  contactId  String
+  contact    Contact    @relation(fields: [contactId], references: [id])
+  companyId  String
+  company    Company    @relation(fields: [companyId], references: [id])
+  ownerId    String
+  owner      User       @relation(fields: [ownerId], references: [id])
+  stage      LeadStage  @default(NEW)
+  source     LeadSource
+  budget     Int?
+  scopeNotes String?
+  aiScore    Int?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  deletedAt  DateTime?
+  activities Activity[]
+  messages   Message[]
+
+  @@index([ownerId])
+  @@index([stage])
+  @@index([deletedAt])
+}
+
+model Activity {
+  id        String       @id @default(uuid())
+  leadId    String
+  lead      Lead         @relation(fields: [leadId], references: [id])
+  actorId   String
+  actor     User         @relation(fields: [actorId], references: [id])
+  type      ActivityType
+  payload   Json
+  viaAI     Boolean      @default(false)
+  createdAt DateTime     @default(now())
+
+  @@index([leadId])
+  @@index([createdAt])
+}
+
+model Message {
+  id           String           @id @default(uuid())
+  leadId       String
+  lead         Lead             @relation(fields: [leadId], references: [id])
+  contactId    String
+  contact      Contact          @relation(fields: [contactId], references: [id])
+  direction    MessageDirection
+  channel      String           @default("LINE")
+  lineEventId  String?          @unique
+  content      String
+  status       MessageStatus    @default(SENT)
+  viaAI        Boolean          @default(false)
+  approvedById String?
+  createdAt    DateTime         @default(now())
+
+  @@index([leadId])
+  @@index([contactId])
+}
+
+model AuditLog {
+  id           String   @id @default(uuid())
+  actorId      String
+  actorRole    String
+  action       String
+  resource     String
+  resourceId   String?
+  ipAddress    String
+  userAgent    String
+  status       String
+  changes      Json?
+  errorMessage String?
+  timestampUtc DateTime @default(now())
+
+  @@index([actorId])
+  @@index([resource])
+  @@index([timestampUtc])
+}
