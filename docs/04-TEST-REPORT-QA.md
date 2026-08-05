@@ -9,18 +9,20 @@ live LLM key or LINE channel.
 ## 1. Result summary
 
 ```
-Running 14 tests using 10 workers
-  14 passed (9.0s)
+Running 15 tests using 10 workers
+  15 passed (9.3s)
 ```
-Reproduced twice consecutively (14/14 both times) to rule out flakiness before sign-off — see §3 for
-the flake that *was* found and fixed along the way.
+Reproduced twice consecutively (15/15 both times) to rule out flakiness before sign-off — see §3 for
+the flake that *was* found and fixed along the way. (Originally 14; a 6th RBAC case was added after a
+later security pass found `ai-copilot.service.ts` had no lead-ownership check — see
+`docs/07-FINAL-HANDOVER-CHECKLIST.md`.)
 
 | Spec file | Test IDs | Covers | Result |
 |---|---|---|---|
 | `e2e/core-crm-flow.spec.ts` | E2E-01 | US-01–US-07, US-16, DP-01, DP-02 | ✅ 1/1 |
 | `e2e/ai-copilot-fallback.spec.ts` | E2E-02 | US-08, US-09 (indirectly), US-10, US-11 | ✅ 4/4 |
 | `e2e/line-webhook-security.spec.ts` | E2E-03 | US-12, US-13, DP-03, DP-04 | ✅ 4/4 |
-| `e2e/rbac-violations.spec.ts` | E2E-04 | RBAC §4, BA §3.1 terminal-stage guard | ✅ 5/5 |
+| `e2e/rbac-violations.spec.ts` | E2E-04 | RBAC §4, BA §3.1 terminal-stage guard, AI Copilot ownership | ✅ 6/6 |
 
 This satisfies the JD's stated minimum ("automated tests for one core CRM flow, one AI skill
 behavior/fallback, and one LINE webhook security/idempotency flow") and the additional RBAC-violation
@@ -146,6 +148,9 @@ deployment (`TEST_BASE_URL=https://jenosize-crm-ai.vercel.app`), reproduced twic
 ```
 13 passed, 1 skipped (both runs)
 ```
+
+*(Pre-security-pass baseline, 14-test suite. Re-verified again after the later security/RBAC pass —
+see the updated count below.)*
 
 The 1 skip is `ai-copilot-fallback.spec.ts`'s forced-provider-failure case — deliberately skipped
 against a remote target because `ALLOW_TEST_HOOKS` is correctly unset in production (§3 item 5); the
