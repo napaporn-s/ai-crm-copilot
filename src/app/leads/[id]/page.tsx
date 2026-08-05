@@ -1,4 +1,5 @@
 import { getSession } from '@/core/auth/get-session';
+import { formatDateThai } from '@/lib/format-date';
 import { leadService } from '@/core/services/lead.service';
 import { NavBar } from '@/components/nav-bar';
 import { StageControl } from '@/components/stage-control';
@@ -92,7 +93,7 @@ export default async function LeadDetailPage({ params }: { params: { id: string 
             <ol className="space-y-3">
               {timeline.map((entry) => (
                 <li key={entry.id} className="border-l-2 border-gray-200 pl-3 text-sm">
-                  <p className="text-xs text-gray-400">{entry.createdAt.toLocaleString()}</p>
+                  <p className="text-xs text-gray-400">{formatDateThai(entry.createdAt)}</p>
                   {entry.kind === 'activity' ? (
                     <ActivityLine type={entry.type} actor={entry.actor} payload={entry.payload} />
                   ) : (

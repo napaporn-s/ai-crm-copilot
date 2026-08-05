@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getSession } from '@/core/auth/get-session';
+import { formatDateThai } from '@/lib/format-date';
 import { leadService } from '@/core/services/lead.service';
 import { NavBar } from '@/components/nav-bar';
 import type { LeadStage } from '@prisma/client';
@@ -85,7 +86,7 @@ export default async function LeadsPage({
                   </td>
                   <td className="px-4 py-3 text-gray-600">{lead.owner.name}</td>
                   <td className="px-4 py-3 text-gray-600">{lead.source}</td>
-                  <td className="px-4 py-3 text-gray-500">{new Date(lead.updatedAt).toLocaleString()}</td>
+                  <td className="px-4 py-3 text-gray-500">{formatDateThai(lead.updatedAt)}</td>
                 </tr>
               ))}
               {items.length === 0 && (
