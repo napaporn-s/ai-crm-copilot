@@ -70,6 +70,7 @@
 | `.env.example` | ✅ | Complete, placeholder values only |
 | Trade-offs, known limitations, next steps | ✅ | `README.md` §7, `docs/02-ARCHITECTURE-SA.md` §8 |
 | Structured logging & monitoring notes | ✅ | `README.md` §9 (added — was a gap, closed) |
+| Post-QA security hardening pass | ✅ | Audit-log PII masking extended beyond credentials; prompt-injection guard added for AI Copilot (`src/core/integrations/ai/prompt-guard.ts`); DB connection pooling documented for Neon/Vercel (`.env.example`, `prisma/schema.prisma`); CI pipeline gained a parallel `security-scan` job (`npm audit`, CodeQL, gitleaks) — see `README.md` §7 and `docs/02-ARCHITECTURE-SA.md` §8 |
 | 1 core CRM flow test | ✅ | E2E-01, passing against production |
 | 1 AI skill/fallback test | ✅ | E2E-02 (fallback case correctly skipped against prod — `ALLOW_TEST_HOOKS` off by design) |
 | 1 LINE webhook security/idempotency test | ✅ | E2E-03, passing against production with the real Channel Secret |

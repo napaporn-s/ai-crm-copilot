@@ -420,6 +420,10 @@ implement the same TypeScript interface (`AiCopilotEngine`), so swapping/mocking
    defense-in-depth note, not a blocker).
 4. In-memory rate limiting (§4.4) does not survive a multi-instance/serverless deployment — documented
    limitation, not fixed in this MVP.
+5. `lineWebhookService.processEvents` (§6) does all DB writes synchronously inside the webhook request
+   — no queue between "signature verified" and "persisted." Acceptable at demo volume; a production
+   deployment under real message bursts should ack fast and move persistence to a background
+   queue/worker, so a slow write can't threaten LINE's webhook response-time expectations.
 
 ---
 

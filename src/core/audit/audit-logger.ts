@@ -55,10 +55,11 @@ export class AuditLogger {
 
   private static sanitizeSensitiveData<T>(data: T): T {
     const jsonString = JSON.stringify(data);
-    const sanitized = jsonString.replace(
-      /"(password|token|secret|creditCard)":"[^"]*"/gi,
-      '"$1":"[REDACTED]"'
-    );
+    const sanitized = jsonString
+      .replace(/"(password|token|secret|creditCard)":"[^"]*"/gi, '"$1":"[REDACTED]"')
+      .replace(/"(email|phone|address)":"[^"]*"/gi, '"$1":"[PII_REDACTED]"')
+      .replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, '[EMAIL]')
+      .replace(/(\+?\d[\d\-\s]{6,}\d)/g, '[PHONE]');
     return JSON.parse(sanitized);
   }
 }

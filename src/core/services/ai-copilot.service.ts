@@ -5,6 +5,7 @@ import { NotFoundError, ConflictError } from '@/core/errors/app-errors';
 import { LlmProviderAdapter } from '@/core/integrations/ai/llm-provider-adapter';
 import { HeuristicFallbackEngine } from '@/core/integrations/ai/heuristic-engine';
 import { redactContextForAi } from '@/core/integrations/ai/redact';
+import { sanitizePromptInjection } from '@/core/integrations/ai/prompt-guard';
 import type { AiCopilotContext } from '@/core/integrations/ai/types';
 import { AiCopilotResultSchema, type AiCopilotResult } from '@/core/schemas/ai-copilot.schema';
 import { AuditLogger } from '@/core/audit/audit-logger';
@@ -62,7 +63,7 @@ export const aiCopilotService = {
     params: ActorContext & { leadId: string; forceFailure?: boolean }
   ): Promise<{ activityId: string } & AiCopilotResult> {
     const { context } = await buildContext(params.leadId);
-    const redacted = redactContextForAi(context);
+    const redacted = sanitizePromptInjection(redactContextForAi(context));
 
     let isFallback = false;
     let engineResult;

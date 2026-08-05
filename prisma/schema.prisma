@@ -1,6 +1,10 @@
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  // Direct (non-pooled) connection for Prisma Migrate/CLI — required because a PgBouncer
+  // transaction-mode pooler (e.g. Neon's pooled endpoint used in DATABASE_URL below) doesn't
+  // support the schema engine. See .env.example for the local vs. production values.
+  directUrl = env("DIRECT_URL")
 }
 
 generator client {

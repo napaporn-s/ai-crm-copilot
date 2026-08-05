@@ -17,3 +17,36 @@ jobs:
       - run: npx tsc --noEmit
       - run: npx playwright install --with-deps
       - run: npx playwright test
+
+  # Runs in parallel with quality-gate; does not block it.
+  security-scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+
+      # Dependency vulnerability scan. Threshold is "critical" (not "high") because
+      # `npm audit --audit-level=high` currently fails on 5 pre-existing high-severity
+      # findings in next/postcss/glob that only resolve via breaking major upgrades
+      # (see npm audit fix --force). Revisit this threshold after that upgrade.
+      - run: npm audit --audit-level=critical
+
+      # CodeQL SAST. Free tier applies automatically for public repos; private repos
+      # need GitHub Advanced Security for this to run without failing on quota.
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+      - uses: github/codeql-action/analyze@v3
+
+      # Secret scanning. No account/token setup required for public/personal repos.
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

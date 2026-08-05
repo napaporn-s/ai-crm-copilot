@@ -120,6 +120,16 @@ live (real webhook signature verification, real outbound sends via the Messaging
   explicitly as an assumption in `docs/01-REQUIREMENTS-BA.md` §1.5, not a literal requirement.
 - No SSO, no password reset flow, no rate limiting on login — all reasonable for a demo/MVP, not for
   production.
+- DB connection pooling: serverless functions on Vercel can each open a new Postgres connection on
+  cold start, which can exceed Neon's `max_connections` without a limit. `.env.example` now documents
+  Neon's pooled (`-pooler`) endpoint for `DATABASE_URL` plus a direct endpoint for `DIRECT_URL`
+  (required by Prisma Migrate) — confirm the live Vercel project's env vars actually use the pooled
+  endpoint, not just the direct one.
+- LINE webhook processing is synchronous: signature verification, lead/contact lookup, message +
+  activity + audit-log writes all happen inline in the same request before responding to LINE. Fine at
+  demo volume; a production version handling real traffic bursts would ack the webhook immediately
+  (after signature check) and hand the DB writes to a background queue/worker, both to stay well under
+  LINE's webhook response-time expectations and to isolate a slow/failed write from the delivery ack.
 
 ## 8. API notes
 
