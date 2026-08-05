@@ -23,6 +23,7 @@ npm-debug.log*
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+docs/04-test-report-data.json
 
 # recruitment/assignment source material — not ours to publish
 *.pdf
