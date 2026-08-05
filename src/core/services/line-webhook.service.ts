@@ -20,8 +20,12 @@ async function getOrCreateUnassignedCompany() {
 
 async function getDefaultTriageOwnerId(): Promise<string> {
   const admin = await prisma.user.findFirst({ where: { role: 'ADMIN' } });
-  if (!admin) throw new Error('No ADMIN user exists to own auto-created LINE leads — seed data is missing');
-  return admin.id;
+  if (admin) return admin.id;
+
+  const anyUser = await prisma.user.findFirst();
+  if (anyUser) return anyUser.id;
+
+  throw new Error('No user exists in system to own auto-created LINE leads — seed data is missing');
 }
 
 interface ProcessResult {
