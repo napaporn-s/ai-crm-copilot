@@ -68,6 +68,37 @@ test.describe('RBAC violations', () => {
     await rep2Context.close();
   });
 
+  test('Sales Rep cannot run, approve, or discard AI Copilot suggestions on a lead owned by another Sales Rep', async ({
+    request,
+    browser,
+  }) => {
+    await login(request, 'rep1@jenosize.demo');
+    const company = await createCompany(request, `RBAC Co ${Date.now()}`);
+    const contact = await createContact(request, company.id, 'RBAC Contact E');
+    const lead = await createLead(request, { contactId: contact.id, companyId: company.id });
+
+    const rep2Context = await browser.newContext();
+    const rep2Api = rep2Context.request;
+    await login(rep2Api, 'rep2@jenosize.demo');
+
+    const analysisRes = await rep2Api.post(`/api/leads/${lead.id}/ai-copilot`, { data: {} });
+    expect(analysisRes.status()).toBe(403);
+
+    // Owner (rep1) legitimately requests analysis, producing a real DRAFT suggestion...
+    const ownerAnalysis = await request.post(`/api/leads/${lead.id}/ai-copilot`, { data: {} });
+    expect(ownerAnalysis.ok()).toBeTruthy();
+    const activityId = (await ownerAnalysis.json()).data.activityId as string;
+
+    // ...which rep2 must not be able to approve (would send a real LINE message) or discard.
+    const approveRes = await rep2Api.post(`/api/leads/${lead.id}/ai-copilot/${activityId}/approve`, { data: {} });
+    expect(approveRes.status()).toBe(403);
+
+    const discardRes = await rep2Api.post(`/api/leads/${lead.id}/ai-copilot/${activityId}/discard`, { data: {} });
+    expect(discardRes.status()).toBe(403);
+
+    await rep2Context.close();
+  });
+
   test('WON is terminal: Sales Rep cannot reopen it, Admin can (BA §3.1)', async ({ request, browser }) => {
     await login(request, 'rep1@jenosize.demo');
     const company = await createCompany(request, `RBAC Co ${Date.now()}`);

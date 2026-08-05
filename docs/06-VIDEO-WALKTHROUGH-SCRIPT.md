@@ -13,7 +13,7 @@
 
 | เวลา | Action หน้าจอ | คำพูด |
 |---|---|---|
-| 0:00 | หน้าจอว่าง หรือหน้า README บน GitHub | "สวัสดีค่ะ/ครับ นี่คือ Jenosize AI CRM — ระบบ CRM ที่มี AI Copilot และเชื่อมกับ LINE Official Account จริง ทำขึ้นสำหรับ Test Assignment ตำแหน่ง Lead AI Software Engineer ของ Jenosize" |
+| 0:00 | หน้าจอว่าง หรือหน้า README บน GitHub | "สวัสดีค่ะ นี่คือ Jenosize AI CRM — ระบบ CRM ที่มี AI Copilot และเชื่อมกับ LINE Official Account จริง ทำขึ้นสำหรับ Test Assignment ตำแหน่ง Lead AI Software Engineer ของ Jenosize" |
 | 0:08 | เปิด `docs/02-ARCHITECTURE-SA.md` ใน VS Code เลื่อนให้เห็นหัวข้อ Layered Architecture | "สถาปัตยกรรมเป็น Next.js 14 App Router ทั้งฝั่งหน้าเว็บและ API ต่อกับฐานข้อมูล PostgreSQL ผ่าน Prisma แบ่งเป็น 4 ชั้น คือ Presentation, BFF, Service, และ Repository — แยกชัดเจนไม่ปนกัน" |
 | 0:20 | เลื่อนไปหัวข้อ ERD/Entities | "ข้อมูลหลักมี 7 ตาราง คือ User, Company, Contact, Lead, Activity, Message และ AuditLog — ทุกการเปลี่ยนแปลงข้อมูลจะถูกบันทึกลง AuditLog แบบ append-only ตรวจสอบย้อนหลังได้ทุกจุด" |
 | 0:33 | เปิดแท็บ `https://jenosize-crm-ai.vercel.app` | "ระบบ deploy จริงอยู่บน Vercel เชื่อมกับฐานข้อมูล Postgres จริงบน Neon ไม่ใช่ mock data ค่ะ ข้อมูล seed มีจริง 2,000 contacts และ 300 leads ตามโจทย์" |
@@ -59,7 +59,7 @@
 | 3:36 | เปิด `docs/01-REQUIREMENTS-BA.md` → `02` → `03` → `04` สลับให้เห็นชื่อไฟล์เร็วๆ | "เอกสารส่งมอบครบตาม pipeline BA, SA, PM, DEV, QA อยู่ในโฟลเดอร์ docs/ ทั้งหมด รวมถึง AI-usage log ที่บันทึกว่า prompt ไหนใช้ทำอะไร และรีวิวโค้ด AI แล้วแก้อะไรไปบ้าง" |
 | 3:50 | เปิด `README.md` เลื่อนให้เห็นหัวข้อ "Known limitations" | "ส่วนข้อจำกัดที่ยังไม่ทำ เช่น SSO, rate limiting แบบ distributed ก็ระบุไว้ตรงๆ ในเอกสารเช่นกัน ไม่ปิดบัง" |
 | 4:05 | กลับมาหน้า `/leads` ของเว็บที่ deploy จริง | "ในการออกแบบ MVP ครั้งนี้ ดิฉันมุ่งเน้นที่ Vertical Slice ที่สมบูรณ์ ปลอดภัย และใช้งานได้จริงบน Production โดยให้ความสำคัญกับ RBAC Security, Audit Logging พร้อม PII Masking, Connection Pooling บน Neon, Prompt Injection Guardrails แบบ Defense-in-Depth และ E2E Test Suite รวม 14 Scenarios ส่วนระบบ Async Queue สำหรับ LINE Webhook ถูกระบุไว้ใน Known Limitations ของ README เพื่อเตรียมพร้อมสเกลสู่ Production ต่อไปค่ะ" |
-| 4:20 | หน้าจอนิ่ง หรือโชว์ URL repo | "ขอบคุณที่รับชมค่ะ/ครับ" |
+| 4:20 | หน้าจอนิ่ง หรือโชว์ URL repo | "ขอบคุณที่รับชมค่ะ" |
 
 ---
 

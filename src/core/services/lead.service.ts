@@ -1,7 +1,8 @@
 import { leadRepository } from '@/core/repositories/lead.repository';
 import { activityRepository } from '@/core/repositories/activity.repository';
 import { AuditLogger } from '@/core/audit/audit-logger';
-import { NotFoundError, ConflictError, ForbiddenError } from '@/core/errors/app-errors';
+import { NotFoundError, ConflictError } from '@/core/errors/app-errors';
+import { assertOwnsLead } from '@/core/auth/lead-ownership';
 import type { CreateLeadInput, StageTransitionInput } from '@/core/schemas/lead.schema';
 import type { LeadStage, UserRole } from '@prisma/client';
 
@@ -54,9 +55,7 @@ export const leadService = {
   async getDetail(leadId: string, actor: Pick<ActorContext, 'actorId' | 'actorRole'>) {
     const lead = await leadRepository.findDetailWithTimeline(leadId);
     if (!lead) throw new NotFoundError('Lead not found');
-    if (actor.actorRole === 'SALES_REP' && lead.ownerId !== actor.actorId) {
-      throw new ForbiddenError('You can only view leads you own');
-    }
+    assertOwnsLead(lead.ownerId, actor, 'You can only view leads you own');
     return lead;
   },
 
@@ -65,10 +64,7 @@ export const leadService = {
   async transitionStage(leadId: string, input: StageTransitionInput, actor: ActorContext) {
     const lead = await leadRepository.findById(leadId);
     if (!lead) throw new NotFoundError('Lead not found');
-
-    if (actor.actorRole === 'SALES_REP' && lead.ownerId !== actor.actorId) {
-      throw new ForbiddenError('You can only update leads you own');
-    }
+    assertOwnsLead(lead.ownerId, actor, 'You can only update leads you own');
 
     const isReopeningTerminal = TERMINAL_STAGES.includes(lead.stage) && lead.stage !== input.toStage;
     if (isReopeningTerminal && actor.actorRole !== 'ADMIN') {

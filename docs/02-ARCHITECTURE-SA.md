@@ -289,6 +289,18 @@ export const LineWebhookEventSchema = z.object({
 | A09 Logging Failures | AuditLog persisted (§5), redaction before persist/AI-send (DP-05) |
 | A10 SSRF | AI/LINE outbound calls only to allow-listed hostnames read from env, not user input |
 
+### 4.1b AI/LLM-specific risks (OWASP Top 10 for LLM Applications subset)
+
+The mapping above covers the generic web OWASP Top 10; AI Copilot also carries its own risk category
+that a web-only threat model misses entirely — worth naming explicitly since the untrusted input here
+(a customer's LINE message) flows directly into an LLM prompt.
+
+| Risk | Control |
+|---|---|
+| LLM01 Prompt Injection | Customer-supplied message/note text is scanned for common injection phrasing and neutralized (`src/core/integrations/ai/prompt-guard.ts`) before it reaches the LLM payload; the system prompt explicitly instructs the model to treat the JSON context as untrusted data only, never follow instructions embedded in it, and never reveal itself |
+| LLM02 Insecure Output Handling | Engine output (real provider or heuristic) is always validated against `AiCopilotResultSchema` (zod) before being persisted or shown; a malformed/oversized response degrades to the heuristic fallback rather than being trusted raw (SA §7) |
+| LLM06 Sensitive Information Disclosure | PII is redacted from the context before it reaches the LLM (`redact.ts`, DP-05); AI Copilot actions are ownership-scoped (RBAC §4) so a Sales Rep's queries can only ever expose their own leads' data to the model, not a teammate's |
+
 ### 4.2 LINE webhook signature verification (DP-03)
 ```
 computedSignature = base64(HMAC-SHA256(channelSecret, rawRequestBody))
@@ -304,6 +316,12 @@ unauthenticated requests away from `app/(dashboard)/**` and to reject unauthenti
 calls (except `/api/auth/login` and `/api/line/webhook`, which authenticate differently — session vs.
 HMAC). Fine-grained role checks (e.g., "Manager-only reassign") live in the Service layer, not
 middleware, because they need the specific resource's owner to evaluate "own lead" vs. "any lead."
+
+The "own lead vs. any lead" check itself is centralized in `assertOwnsLead` (`src/core/auth/lead-ownership.ts`)
+and shared by every service that reads/mutates a Lead (`lead.service.ts`, `ai-copilot.service.ts`) — it
+was originally duplicated inline per service, which is exactly how `ai-copilot.service.ts` shipped
+without it at first (caught and fixed in a later security pass, then unified into this shared guard so
+a third consumer can't repeat the omission).
 
 ### 4.4 Rate limiting
 Given the 16-hour timebox, full distributed rate limiting is out of scope. Minimum viable: an
@@ -420,7 +438,13 @@ implement the same TypeScript interface (`AiCopilotEngine`), so swapping/mocking
    defense-in-depth note, not a blocker).
 4. In-memory rate limiting (§4.4) does not survive a multi-instance/serverless deployment — documented
    limitation, not fixed in this MVP.
-5. `lineWebhookService.processEvents` (§6) does all DB writes synchronously inside the webhook request
+5. CSP `script-src` includes `'unsafe-inline' 'unsafe-eval'` (`next.config.js`) — loosens XSS
+   mitigation from a strict CSP. A nonce-based strict CSP is the correct next hardening step;
+   not changed here to avoid an unverified edit to the live site's security headers this late in
+   the timeline. No `eval`/`Function`/`dangerouslySetInnerHTML` exists anywhere in `src/` today, so
+   `'unsafe-eval'` is very likely droppable — worth confirming with a full rebuild + smoke test before
+   tightening it.
+6. `lineWebhookService.processEvents` (§6) does all DB writes synchronously inside the webhook request
    — no queue between "signature verified" and "persisted." Acceptable at demo volume; a production
    deployment under real message bursts should ack fast and move persistence to a background
    queue/worker, so a slow write can't threaten LINE's webhook response-time expectations.

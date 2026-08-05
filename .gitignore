@@ -24,6 +24,9 @@ npm-debug.log*
 /blob-report/
 /playwright/.cache/
 
+# recruitment/assignment source material — not ours to publish
+*.pdf
+
 # os
 .DS_Store
 Thumbs.db

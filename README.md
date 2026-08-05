@@ -130,6 +130,10 @@ live (real webhook signature verification, real outbound sends via the Messaging
   demo volume; a production version handling real traffic bursts would ack the webhook immediately
   (after signature check) and hand the DB writes to a background queue/worker, both to stay well under
   LINE's webhook response-time expectations and to isolate a slow/failed write from the delivery ack.
+- CSP `script-src` in `next.config.js` still includes `'unsafe-inline' 'unsafe-eval'`, which weakens
+  its XSS mitigation. Nothing in `src/` actually calls `eval`/`Function`/`dangerouslySetInnerHTML`, so
+  it's very likely droppable — left as-is here rather than editing production security headers
+  unverified this close to submission; a nonce-based strict CSP is the recommended next step.
 
 ## 8. API notes
 

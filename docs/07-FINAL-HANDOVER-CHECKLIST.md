@@ -71,6 +71,8 @@
 | Trade-offs, known limitations, next steps | ✅ | `README.md` §7, `docs/02-ARCHITECTURE-SA.md` §8 |
 | Structured logging & monitoring notes | ✅ | `README.md` §9 (added — was a gap, closed) |
 | Post-QA security hardening pass | ✅ | Audit-log PII masking extended beyond credentials; prompt-injection guard added for AI Copilot (`src/core/integrations/ai/prompt-guard.ts`); DB connection pooling documented for Neon/Vercel (`.env.example`, `prisma/schema.prisma`); CI pipeline gained a parallel `security-scan` job (`npm audit`, CodeQL, gitleaks) — see `README.md` §7 and `docs/02-ARCHITECTURE-SA.md` §8 |
+| RBAC gap found & fixed: AI Copilot had no lead-ownership check | ✅ | `aiCopilotService.requestAnalysis/approveSuggestion/discardSuggestion` let a Sales Rep run/approve/discard AI actions — including a real LINE send — on a lead they didn't own. Fixed and centralized into a shared `assertOwnsLead` guard (`src/core/auth/lead-ownership.ts`) used by both `lead.service.ts` and `ai-copilot.service.ts`; regression test added (`e2e/rbac-violations.spec.ts`); full local suite re-run at 15/15 passing |
+| AI/LLM-specific threat model documented | ✅ | `docs/02-ARCHITECTURE-SA.md` §4.1b — prompt injection, insecure output handling, sensitive info disclosure, mapped to actual controls (`prompt-guard.ts`, `AiCopilotResultSchema`, `redact.ts` + RBAC) |
 | 1 core CRM flow test | ✅ | E2E-01, passing against production |
 | 1 AI skill/fallback test | ✅ | E2E-02 (fallback case correctly skipped against prod — `ALLOW_TEST_HOOKS` off by design) |
 | 1 LINE webhook security/idempotency test | ✅ | E2E-03, passing against production with the real Channel Secret |

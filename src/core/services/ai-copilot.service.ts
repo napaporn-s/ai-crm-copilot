@@ -2,6 +2,7 @@ import { leadRepository } from '@/core/repositories/lead.repository';
 import { activityRepository } from '@/core/repositories/activity.repository';
 import { messageRepository } from '@/core/repositories/message.repository';
 import { NotFoundError, ConflictError } from '@/core/errors/app-errors';
+import { assertOwnsLead } from '@/core/auth/lead-ownership';
 import { LlmProviderAdapter } from '@/core/integrations/ai/llm-provider-adapter';
 import { HeuristicFallbackEngine } from '@/core/integrations/ai/heuristic-engine';
 import { redactContextForAi } from '@/core/integrations/ai/redact';
@@ -34,12 +35,13 @@ interface AiSuggestionPayload extends AiCopilotResult {
   status: 'DRAFT' | 'APPROVED' | 'DISCARDED';
 }
 
-async function buildContext(leadId: string): Promise<{ context: AiCopilotContext; contactId: string }> {
+async function buildContext(leadId: string): Promise<{ context: AiCopilotContext; contactId: string; ownerId: string }> {
   const lead = await leadRepository.findDetailWithTimeline(leadId);
   if (!lead) throw new NotFoundError('Lead not found');
 
   return {
     contactId: lead.contactId,
+    ownerId: lead.ownerId,
     context: {
       leadId: lead.id,
       contactName: lead.contact.name,
@@ -62,7 +64,8 @@ export const aiCopilotService = {
   async requestAnalysis(
     params: ActorContext & { leadId: string; forceFailure?: boolean }
   ): Promise<{ activityId: string } & AiCopilotResult> {
-    const { context } = await buildContext(params.leadId);
+    const { context, ownerId } = await buildContext(params.leadId);
+    assertOwnsLead(ownerId, params, 'You can only use AI Copilot on leads you own');
     const redacted = sanitizePromptInjection(redactContextForAi(context));
 
     let isFallback = false;
@@ -119,7 +122,8 @@ export const aiCopilotService = {
       throw new ConflictError(`Suggestion already ${payload.status.toLowerCase()}`);
     }
 
-    const { contactId } = await buildContext(params.leadId);
+    const { contactId, ownerId } = await buildContext(params.leadId);
+    assertOwnsLead(ownerId, params, 'You can only use AI Copilot on leads you own');
     const adapter = getLineAdapter();
     const pushResult = await adapter.push(contactId, payload.draftLineReply);
 
@@ -156,6 +160,10 @@ export const aiCopilotService = {
 
   /** US-09 — discard writes only an audit trail, never a send. */
   async discardSuggestion(params: ActorContext & { leadId: string; activityId: string }) {
+    const lead = await leadRepository.findById(params.leadId);
+    if (!lead) throw new NotFoundError('Lead not found');
+    assertOwnsLead(lead.ownerId, params, 'You can only use AI Copilot on leads you own');
+
     const activity = await activityRepository.findById(params.activityId);
     if (!activity || activity.leadId !== params.leadId || activity.type !== 'AI_SUGGESTION') {
       throw new NotFoundError('AI suggestion not found');
