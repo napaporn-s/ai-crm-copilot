@@ -32,7 +32,7 @@ export const contactRepository = {
     return Promise.all([
       prisma.contact.findMany({
         where,
-        orderBy: { createdAt: 'desc' },
+        orderBy: { updatedAt: 'desc' },
         skip: (params.page - 1) * params.pageSize,
         take: params.pageSize,
       }),

@@ -28,6 +28,17 @@ docs/04-test-report-data.json
 # recruitment/assignment source material — not ours to publish
 *.pdf
 
+# media and temporary scripts
+scripts/
+docs/Sound Recordings/
+docs/audio/
+docs/images/
+docs/images_walkthrough/
+docs/screenshots/
+docs/videos_temp/
+docs/*.mp4
+!docs/FINAL_WALKTHROUGH_DEMO_OPTIMIZED.mp4
+
 # os
 .DS_Store
 Thumbs.db

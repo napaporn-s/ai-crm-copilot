@@ -16,7 +16,7 @@
 | 0:00 | หน้าจอว่าง หรือหน้า README บน GitHub | "สวัสดีค่ะ นี่คือ Jenosize AI CRM — ระบบ CRM ที่มี AI Copilot และเชื่อมกับ LINE Official Account จริง ทำขึ้นสำหรับ Test Assignment ตำแหน่ง Lead AI Software Engineer ของ Jenosize" |
 | 0:08 | เปิด `docs/02-ARCHITECTURE-SA.md` ใน VS Code เลื่อนให้เห็นหัวข้อ Layered Architecture | "สถาปัตยกรรมเป็น Next.js 14 App Router ทั้งฝั่งหน้าเว็บและ API ต่อกับฐานข้อมูล PostgreSQL ผ่าน Prisma แบ่งเป็น 4 ชั้น คือ Presentation, BFF, Service, และ Repository — แยกชัดเจนไม่ปนกัน" |
 | 0:20 | เลื่อนไปหัวข้อ ERD/Entities | "ข้อมูลหลักมี 7 ตาราง คือ User, Company, Contact, Lead, Activity, Message และ AuditLog — ทุกการเปลี่ยนแปลงข้อมูลจะถูกบันทึกลง AuditLog แบบ append-only ตรวจสอบย้อนหลังได้ทุกจุด" |
-| 0:33 | เปิดแท็บ `https://jenosize-crm-ai.vercel.app` | "ระบบ deploy จริงอยู่บน Vercel เชื่อมกับฐานข้อมูล Postgres จริงบน Neon ไม่ใช่ mock data ค่ะ ข้อมูล seed มีจริง 2,000 contacts และ 300 leads ตามโจทย์" |
+| 0:33 | เปิดแท็บ `https://jenosize-crm-ai.vercel.app` | "ระบบ deploy จริงอยู่บน Vercel เชื่อมกับฐานข้อมูล Postgres จริงบน Neon ข้อมูล seed มีจริง 2,000 contacts และ 300 leads ตามโจทย์" |
 
 ---
 
@@ -24,9 +24,9 @@
 
 | เวลา | Action หน้าจอ | คำพูด |
 |---|---|---|
-| 0:45 | อยู่หน้า `/login` กรอก `rep1@jenosize.demo` / `Passw0rd!` กด Sign in | "ลอง login ด้วยบัญชี Sales Rep คนหนึ่งก่อนนะค่ะ" |
+| 0:45 | อยู่หน้า `/login` กรอก `rep1@jenosize.demo` / `Passw0rd!` กด Sign in | "ลอง login ด้วยบัญชี Sales Rep คนหนึ่งก่อนนะคะ" |
 | 0:52 | เข้าหน้า `/leads` แสดง "Pipeline — my leads" | "จะเห็นว่าหัวข้อบอกว่า 'my leads' เท่านั้น — Sales Rep แต่ละคนเห็นแค่ lead ของตัวเอง เป็น RBAC ที่บังคับที่ฝั่ง server ไม่ใช่แค่ซ่อนใน UI" |
-| 1:00 | พิมพ์ในช่องค้นหา หรือเลือก filter stage | "ระบบมี search และ filter ตาม stage ได้ ข้อมูลจริง 300 leads ก็ยังลื่นอยู่" |
+| 1:00 | พิมพ์ในช่องค้นหา หรือเลือก filter stage | "ระบบมี search และ filter ตาม stage ได้ ข้อมูลจริง 300 leads ก็ยังลื่นอยู่ ใช้เวลาเพียง 2.2ms" |
 | 1:08 | คลิกเข้า lead ใดก็ได้ 1 รายการ | "เข้าไปดู lead detail — ตรงนี้จะเห็น timeline รวมทั้ง Activity และข้อความ LINE เรียงตามเวลาในที่เดียว" |
 | 1:16 | ชี้ปุ่ม pipeline stage (NEW/QUALIFIED/PROPOSAL/WON/LOST) กดเปลี่ยน stage 1 ครั้ง | "เปลี่ยน stage ได้ตรงนี้เลย เช่นเลื่อนจาก NEW ไป QUALIFIED — และถ้า lead ถูกปิดเป็น WON หรือ LOST แล้ว Sales Rep จะย้อนกลับไม่ได้ ต้องให้ Admin เท่านั้นที่เปิดใหม่ได้ กันข้อมูลรายงานเพี้ยน" |
 | 1:26 | Logout แล้ว login ใหม่ด้วย `admin@jenosize.demo` (หรือสลับไปแท็บที่ login ไว้ล่วงหน้า) | "สลับมาเป็น Admin ดูบ้าง — Admin จะเห็น pipeline ทั้งทีมได้" |

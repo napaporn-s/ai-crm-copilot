@@ -35,11 +35,12 @@ interface AiSuggestionPayload extends AiCopilotResult {
   status: 'DRAFT' | 'APPROVED' | 'DISCARDED';
 }
 
-async function buildContext(leadId: string): Promise<{ context: AiCopilotContext; contactId: string; ownerId: string }> {
+async function buildContext(leadId: string): Promise<{ context: AiCopilotContext; contact: typeof leadRepository.findDetailWithTimeline extends (id: string) => Promise<infer T> ? T extends { contact: infer C } ? C : never : never; contactId: string; ownerId: string }> {
   const lead = await leadRepository.findDetailWithTimeline(leadId);
   if (!lead) throw new NotFoundError('Lead not found');
 
   return {
+    contact: lead.contact,
     contactId: lead.contactId,
     ownerId: lead.ownerId,
     context: {
@@ -122,14 +123,15 @@ export const aiCopilotService = {
       throw new ConflictError(`Suggestion already ${payload.status.toLowerCase()}`);
     }
 
-    const { contactId, ownerId } = await buildContext(params.leadId);
+    const { contact, ownerId } = await buildContext(params.leadId);
     assertOwnsLead(ownerId, params, 'You can only use AI Copilot on leads you own');
     const adapter = getLineAdapter();
-    const pushResult = await adapter.push(contactId, payload.draftLineReply);
+    const lineTarget = contact.lineUserId || contact.id;
+    const pushResult = await adapter.push(lineTarget, payload.draftLineReply);
 
     const message = await messageRepository.create({
       leadId: params.leadId,
-      contactId,
+      contactId: contact.id,
       direction: 'OUTBOUND',
       content: payload.draftLineReply,
       status: pushResult.ok ? 'SENT' : 'FAILED',
