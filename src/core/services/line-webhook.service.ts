@@ -93,6 +93,12 @@ export const lineWebhookService = {
           lineEventId: event.webhookEventId,
         });
 
+        // Touch lead updatedAt so it bumps to the top of the Pipeline list
+        await prisma.lead.update({
+          where: { id: lead.id },
+          data: { updatedAt: new Date() },
+        });
+
         await activityRepository.create({
           leadId: lead.id,
           actorId: lead.ownerId,
