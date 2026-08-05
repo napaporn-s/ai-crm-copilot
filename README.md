@@ -1,7 +1,7 @@
 # Jenosize AI CRM — Recruitment Test Assignment
 
 A working AI CRM MVP built for the Jenosize "Lead AI Software Engineer" recruitment test assignment: 
-> **Note:** วิดีโอ Walkthrough (`docs/walkthrough-demo.mp4`) สร้างด้วย **AI-Assisted Video Production Pipeline** (Playwright Automated Capture + Thai AI TTS edge-tts + MoviePy Automated Stitching) เพื่อแสดง AI Orchestration Capability
+> **Note:** วิดีโอ Walkthrough (`docs/FINAL_WALKTHROUGH_DEMO_OPTIMIZED.mp4`) สร้างด้วย **AI-Assisted Video Production Pipeline** (Playwright Automated Capture + Thai AI TTS edge-tts + MoviePy Automated Stitching) เพื่อแสดง AI Orchestration Capability
 
 a responsive CRM (companies/contacts/leads/pipeline), a persistent Postgres database, a reusable AI
 CRM Copilot skill, and a LINE Official Account integration, with an audit trail on every mutation.
