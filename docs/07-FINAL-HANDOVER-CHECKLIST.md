@@ -1,6 +1,6 @@
 # 07 — Final Handover Checklist
 
-**Prepared:** 2026-08-05 · **Status:** Ready for submission except the walkthrough video (script ready — `docs/06-VIDEO-WALKTHROUGH-SCRIPT.md`)
+**Prepared:** 2026-08-05 · **Status:** 100% Complete & Delivered (Walkthrough Video: `docs/FINAL_WALKTHROUGH_DEMO_OPTIMIZED.mp4`)
 
 ## Links
 
@@ -80,7 +80,7 @@
 | Accessible source repo | ✅ | https://github.com/napaporn-s/jenosize-crm-ai-system (renamed for consistency — was split across two mismatched repo names, consolidated) |
 | Deployed URL + demo credentials | ✅ | Above |
 | LINE OA test instructions/QR | ✅ | `README.md` §5; QR lives in the LINE Developers Console for the connected channel |
-| **3-5 min walkthrough video** | ⬜ **Only remaining item** — script ready at `docs/06-VIDEO-WALKTHROUGH-SCRIPT.md`, word-for-word, timed to scene |
+| **3-5 min walkthrough video** | ✅ | `docs/FINAL_WALKTHROUGH_DEMO_OPTIMIZED.mp4` — timed to 4:55 mins, AI DSP tuned, matches script `docs/06-VIDEO-WALKTHROUGH-SCRIPT.md` word-for-word |
 | Never submit live secrets | ✅ | Verified: `.env` never in git history; only `.env.example` tracked |
 
 ---
