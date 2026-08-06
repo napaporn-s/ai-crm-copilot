@@ -1,4 +1,4 @@
-﻿name: Enterprise CI/CD Pipeline
+name: Enterprise CI/CD Pipeline
 on:
   push:
     branches: [ main, develop ]
@@ -7,6 +7,20 @@ on:
 jobs:
   quality-gate:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: jenosize
+          POSTGRES_PASSWORD: devpass
+          POSTGRES_DB: jenosize
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -14,9 +28,18 @@ jobs:
           node-version: 20
           cache: 'npm'
       - run: npm ci
+      - run: npx prisma db push
+      - run: npm run prisma:seed
       - run: npx tsc --noEmit
       - run: npx playwright install --with-deps
       - run: npx playwright test
+        env:
+          DATABASE_URL: "postgresql://jenosize:devpass@localhost:5432/jenosize?schema=public"
+          DIRECT_URL: "postgresql://jenosize:devpass@localhost:5432/jenosize?schema=public"
+          SESSION_SECRET: "ci-test-secret-12345678901234567890"
+          ALLOW_TEST_HOOKS: "true"
+          AI_MOCK_MODE: "true"
+          LINE_MOCK_MODE: "true"
 
   # Runs in parallel with quality-gate; does not block it.
   security-scan:
