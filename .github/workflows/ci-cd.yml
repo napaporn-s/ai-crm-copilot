@@ -44,12 +44,16 @@ jobs:
           DATABASE_URL: "postgresql://jenosize:devpass@localhost:5432/jenosize?schema=public"
           DIRECT_URL: "postgresql://jenosize:devpass@localhost:5432/jenosize?schema=public"
           SESSION_SECRET: "ci-test-secret-12345678901234567890"
+          LINE_CHANNEL_SECRET: "ci-mock-line-channel-secret"
+          LINE_CHANNEL_ACCESS_TOKEN: "ci-mock-line-channel-access-token"
       - run: npx playwright install --with-deps
       - run: npx playwright test
         env:
           DATABASE_URL: "postgresql://jenosize:devpass@localhost:5432/jenosize?schema=public"
           DIRECT_URL: "postgresql://jenosize:devpass@localhost:5432/jenosize?schema=public"
           SESSION_SECRET: "ci-test-secret-12345678901234567890"
+          LINE_CHANNEL_SECRET: "ci-mock-line-channel-secret"
+          LINE_CHANNEL_ACCESS_TOKEN: "ci-mock-line-channel-access-token"
           ALLOW_TEST_HOOKS: "true"
           AI_MOCK_MODE: "true"
           LINE_MOCK_MODE: "true"
