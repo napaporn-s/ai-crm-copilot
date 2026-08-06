@@ -31,9 +31,19 @@ jobs:
       - run: npm ci
       - run: npx prisma generate
       - run: npx prisma db push --skip-generate
+        env:
+          DATABASE_URL: "postgresql://jenosize:devpass@localhost:5432/jenosize?schema=public"
+          DIRECT_URL: "postgresql://jenosize:devpass@localhost:5432/jenosize?schema=public"
       - run: npm run prisma:seed
+        env:
+          DATABASE_URL: "postgresql://jenosize:devpass@localhost:5432/jenosize?schema=public"
+          DIRECT_URL: "postgresql://jenosize:devpass@localhost:5432/jenosize?schema=public"
       - run: npx tsc --noEmit
       - run: npm run build:no-generate
+        env:
+          DATABASE_URL: "postgresql://jenosize:devpass@localhost:5432/jenosize?schema=public"
+          DIRECT_URL: "postgresql://jenosize:devpass@localhost:5432/jenosize?schema=public"
+          SESSION_SECRET: "ci-test-secret-12345678901234567890"
       - run: npx playwright install --with-deps
       - run: npx playwright test
         env:
@@ -58,4 +68,19 @@ jobs:
           node-version: 20
           cache: 'npm'
       - run: npm ci
+
+      # Dependency vulnerability scan (non-blocking threshold for CI)
       - run: npm audit --audit-level=critical || true
+
+      # CodeQL SAST Analysis
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+      - uses: github/codeql-action/analyze@v3
+        continue-on-error: true
+
+      # Secret scanning with Gitleaks
+      - uses: gitleaks/gitleaks-action@v2
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
